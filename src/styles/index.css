@@ -1,0 +1,173 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.app {
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.card {
+  @apply bg-white rounded-lg shadow-lg p-3 mb-3 md:p-4 md:mb-4;
+}
+
+.btn-primary {
+  @apply bg-blue-500 hover:bg-blue-600 active:bg-blue-700 text-white font-medium py-1.5 px-3 rounded-lg transition-colors duration-200 touch-manipulation text-sm;
+}
+
+.btn-secondary {
+  @apply bg-gray-500 hover:bg-gray-600 active:bg-gray-700 text-white font-medium py-1.5 px-3 rounded-lg transition-colors duration-200 touch-manipulation text-sm;
+}
+
+.btn-danger {
+  @apply bg-red-500 hover:bg-red-600 active:bg-red-700 text-white font-medium py-1.5 px-3 rounded-lg transition-colors duration-200 touch-manipulation text-sm;
+}
+
+.btn-success {
+  @apply bg-green-500 hover:bg-green-600 active:bg-green-700 text-white font-medium py-1.5 px-3 rounded-lg transition-colors duration-200 touch-manipulation text-sm;
+}
+
+.input-field {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm;
+}
+
+.select-field {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white text-sm;
+}
+
+.datetime-field {
+  @apply w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm;
+}
+
+.table-header {
+  @apply bg-gray-50 text-gray-700 font-medium py-1.5 px-2 text-left text-xs md:py-2 md:px-3 md:text-sm;
+}
+
+.table-cell {
+  @apply py-1.5 px-2 border-b border-gray-200 text-xs md:py-2 md:px-3 md:text-sm;
+}
+
+.settlement-positive {
+  @apply text-green-600 font-semibold;
+}
+
+.settlement-negative {
+  @apply text-red-600 font-semibold;
+}
+
+.modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4;
+}
+
+.modal-content {
+  @apply bg-white rounded-lg p-4 max-w-md w-full max-h-96 overflow-y-auto md:p-6;
+}
+
+/* 移动端优化 */
+@media (max-width: 768px) {
+  .card {
+    margin-left: -0.5rem;
+    margin-right: -0.5rem;
+    border-radius: 0.75rem;
+  }
+  
+  .btn-primary, .btn-secondary, .btn-danger, .btn-success {
+    min-height: 40px;
+    font-size: 0.875rem;
+  }
+  
+  .input-field, .select-field, .datetime-field {
+    min-height: 40px;
+    font-size: 16px; /* 防止iOS缩放 */
+  }
+  
+  /* 表格横向滚动 */
+  .table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  
+  .table-container table {
+    min-width: 600px;
+  }
+  
+  /* 移动端按钮组优化 */
+  .mobile-btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .mobile-btn-group button {
+    width: 100%;
+  }
+  
+  /* 移动端网格优化 */
+  .mobile-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  
+  /* 移动端表单优化 */
+  .mobile-form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .mobile-checkbox-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+  }
+}
+
+/* 平板端优化 */
+@media (min-width: 768px) and (max-width: 1024px) {
+  .tablet-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+/* 桌面端优化 */
+@media (min-width: 1024px) {
+  .desktop-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2rem;
+  }
+}
+
+/* 触摸优化 */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* 滚动条优化 */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f7fafc;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
+}
