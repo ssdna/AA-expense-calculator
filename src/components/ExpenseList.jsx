@@ -46,6 +46,11 @@ const ExpenseList = ({ expenses, persons, onUpdate, onDelete }) => {
   };
 
   const handleParticipantChange = (personId, checked) => {
+    if (!editForm.participants) {
+      setEditForm({ ...editForm, participants: checked ? [personId] : [] });
+      return;
+    }
+    
     const newParticipants = checked 
       ? [...editForm.participants, personId]
       : editForm.participants.filter(id => id !== personId);
@@ -130,7 +135,7 @@ const ExpenseList = ({ expenses, persons, onUpdate, onDelete }) => {
                           <label key={person.id} className="flex items-center space-x-1 text-xs">
                             <input
                               type="checkbox"
-                              checked={editForm.participants.includes(person.id)}
+                              checked={editForm.participants && editForm.participants.includes(person.id)}
                               onChange={(e) => handleParticipantChange(person.id, e.target.checked)}
                               className="rounded"
                             />
@@ -157,7 +162,10 @@ const ExpenseList = ({ expenses, persons, onUpdate, onDelete }) => {
                     <td className="table-cell text-sm">{expense.description}</td>
                     <td className="table-cell text-sm">{getPersonName(expense.payerId)}</td>
                     <td className="table-cell text-sm">
-                      {expense.participants.map(id => getPersonName(id)).join(', ')}
+                      {expense.participants && expense.participants.length > 0 
+                        ? expense.participants.map(id => getPersonName(id)).join(', ')
+                        : '无'
+                      }
                     </td>
                     <td className="table-cell">
                       <div className="flex flex-col md:flex-row gap-0.5">

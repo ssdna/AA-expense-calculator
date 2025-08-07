@@ -7,7 +7,7 @@ export const calculatePersonSummary = (person, expenses) => {
       totalPaid += expense.amount;
     }
     
-    if (expense.participants.includes(person.id)) {
+    if (expense.participants && expense.participants.includes(person.id)) {
       totalShould += expense.amount / expense.participants.length;
     }
   });

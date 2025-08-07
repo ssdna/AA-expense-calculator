@@ -30,13 +30,20 @@ const ExcelImport = ({ onImport }) => {
         if (workbook.SheetNames.includes('费用表')) {
           const expenseSheet = workbook.Sheets['费用表'];
           const expenseData = XLSX.utils.sheet_to_json(expenseSheet);
-          result.expenses = expenseData.map(row => ({
-            amount: parseFloat(row['金额'] || row['amount'] || 0),
-            description: row['说明'] || row['description'] || '',
-            payerName: row['支付人'] || row['payer'] || '',
-            participantNames: (row['分摊人'] || row['participants'] || '').split(',').map(name => name.trim()),
-            date: row['日期'] || row['date'] || new Date().toISOString().split('T')[0]
-          })).filter(expense => expense.amount > 0 && expense.description);
+          result.expenses = expenseData.map(row => {
+            const participantsStr = row['分摊人'] || row['participants'] || '';
+            const participantNames = participantsStr ? 
+              participantsStr.split(',').map(name => name.trim()).filter(name => name) : 
+              [];
+            
+            return {
+              amount: parseFloat(row['金额'] || row['amount'] || 0),
+              description: row['说明'] || row['description'] || '',
+              payerName: row['支付人'] || row['payer'] || '',
+              participantNames: participantNames,
+              date: row['日期'] || row['date'] || new Date().toISOString().split('T')[0]
+            };
+          }).filter(expense => expense.amount > 0 && expense.description && expense.participantNames.length > 0);
         }
         
         onImport(result);

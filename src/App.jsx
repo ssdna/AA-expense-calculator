@@ -14,16 +14,16 @@ const App = () => {
   const [expenses, setExpenses] = useState([]);
   const [nextPersonId, setNextPersonId] = useState(1);
 
-  // 初始化默认人员
-  useEffect(() => {
-    const defaultPersons = [
-      { id: 1, name: generateRandomName() },
-      { id: 2, name: generateRandomName() },
-      { id: 3, name: generateRandomName() }
-    ];
-    setPersons(defaultPersons);
-    setNextPersonId(4);
-  }, []);
+  // 不初始化默认人员，保持空列表
+  // useEffect(() => {
+  //   const defaultPersons = [
+  //     { id: 1, name: generateRandomName() },
+  //     { id: 2, name: generateRandomName() },
+  //     { id: 3, name: generateRandomName() }
+  //   ];
+  //   setPersons(defaultPersons);
+  //   setNextPersonId(4);
+  // }, []);
 
   const addPerson = (name) => {
     const newPerson = {
@@ -67,24 +67,66 @@ const App = () => {
   };
 
   const handleExcelImport = (data) => {
-    if (data.persons) {
+    let importedPersons = [...persons];
+    let nextId = nextPersonId;
+
+    // 处理人员导入
+    if (data.persons && data.persons.length > 0) {
       const maxId = Math.max(...persons.map(p => p.id), 0);
       const newPersons = data.persons.map((person, index) => ({
         id: maxId + index + 1,
         name: person.name
       }));
-      setPersons([...persons, ...newPersons]);
-      setNextPersonId(maxId + newPersons.length + 1);
+      importedPersons = [...persons, ...newPersons];
+      setPersons(importedPersons);
+      nextId = maxId + newPersons.length + 1;
+      setNextPersonId(nextId);
     }
 
-    if (data.expenses) {
-      const newExpenses = data.expenses.map(expense => ({
-        id: Date.now() + Math.random(),
-        ...expense,
-        time: '12:00:00',
-        timestamp: new Date(`${expense.date}T12:00:00`).toISOString()
-      }));
-      setExpenses([...expenses, ...newExpenses]);
+    // 处理费用导入
+    if (data.expenses && data.expenses.length > 0) {
+      const validExpenses = [];
+      
+      data.expenses.forEach(expense => {
+        // 查找支付人ID
+        const payer = importedPersons.find(p => p.name === expense.payerName);
+        if (!payer) {
+          console.warn(`支付人"${expense.payerName}"不在人员列表中，跳过该费用记录`);
+          return;
+        }
+
+        // 查找分摊人ID
+        const participantIds = [];
+        expense.participantNames.forEach(name => {
+          const participant = importedPersons.find(p => p.name === name);
+          if (participant) {
+            participantIds.push(participant.id);
+          } else {
+            console.warn(`分摊人"${name}"不在人员列表中`);
+          }
+        });
+
+        if (participantIds.length === 0) {
+          console.warn(`费用"${expense.description}"没有有效的分摊人，跳过该记录`);
+          return;
+        }
+
+        // 创建有效的费用记录
+        validExpenses.push({
+          id: Date.now() + Math.random(),
+          amount: expense.amount,
+          description: expense.description,
+          payerId: payer.id,
+          participants: participantIds,
+          date: expense.date,
+          time: '12:00:00',
+          timestamp: new Date(`${expense.date}T12:00:00`).toISOString()
+        });
+      });
+
+      if (validExpenses.length > 0) {
+        setExpenses([...expenses, ...validExpenses]);
+      }
     }
   };
 
