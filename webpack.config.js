@@ -8,7 +8,7 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'),
     filename: process.env.NODE_ENV === 'production' ? 'bundle.[contenthash].js' : 'bundle.js',
     clean: true,
-    publicPath: process.env.NODE_ENV === 'production' ? '/aa-expense-calculator/' : '/'
+    publicPath: process.env.NODE_ENV === 'production' ? '/AA-expense-calculator/' : '/'
   },
   module: {
     rules: [
